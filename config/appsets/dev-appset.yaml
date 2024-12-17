@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: dev-branches-applications
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/kuna-mexa13/test-app
+        revision: HEAD   # Uses HEAD to identify all branches
+        directories:
+          - path: apps/      # Path to the resources
+  template:
+    metadata:
+      name: "{{revision}}-app"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/kuna-mexa13/test-app
+        targetRevision: "{{revision}}"  # Dynamically uses branch name
+        path: .                         # Path within the repo
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{revision}}-namespace"  # Unique namespace per branch
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
