@@ -9,7 +9,7 @@ spec:
         repoURL: https://github.com/kuna-mexa13/test-app
         revision: HEAD   # Uses HEAD to identify all branches
         directories:
-          - path: apps/      # Path to the resources
+          - path: config/apps/      # Path to the resources
   template:
     metadata:
       name: "{{revision}}-app"
