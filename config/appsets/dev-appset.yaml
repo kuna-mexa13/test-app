@@ -7,23 +7,24 @@ spec:
   generators:
     - git:
         repoURL: https://github.com/kuna-mexa13/test-app
-        revision: HEAD   # Uses HEAD to identify all branches
+        revision: "refs/heads/dev-*"  # Match all branches starting with 'dev-'
         directories:
-          - path: config/apps/      # Path to the resources
+          - path: config/apps/  # Path in each branch to generate applications
   template:
     metadata:
-      name: "{{revision}}-app"
+      name: "{{branch}}-app"  # Application name dynamically set per branch
     spec:
       project: default
       source:
         repoURL: https://github.com/kuna-mexa13/test-app
-        targetRevision: "{{revision}}"  # Dynamically uses branch name
-        path: config/apps/                       # Path within the repo
+        targetRevision: "{{branch}}"  # Uses the current branch dynamically
+        path: config/apps/  # Path to manifests in the branch
       destination:
         server: https://kubernetes.default.svc
-        namespace: "{{revision}}-namespace"  # Unique namespace per branch
+        namespace: "{{branch}}-namespace"  # Unique namespace per branch
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
-
+        syncOptions:
+          - CreateNamespace=true
