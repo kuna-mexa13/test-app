@@ -18,7 +18,7 @@ spec:
       source:
         repoURL: https://github.com/kuna-mexa13/test-app
         targetRevision: "{{revision}}"  # Dynamically uses branch name
-        path: {{ .path.path }}                        # Path within the repo
+        path: config/apps/                       # Path within the repo
       destination:
         server: https://kubernetes.default.svc
         namespace: "{{revision}}-namespace"  # Unique namespace per branch
