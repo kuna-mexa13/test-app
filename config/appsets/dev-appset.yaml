@@ -7,21 +7,21 @@ spec:
   generators:
     - git:
         repoURL: https://github.com/kuna-mexa13/test-app
-        revision: "refs/heads/dev-*"  # Match all branches starting with 'dev-'
-        directories:
-          - path: config/apps/  # Path in each branch to generate applications
+        revision: HEAD  # Use HEAD to reference the default branch
+        files:
+          - path: config/apps/application-*.yaml  # Dynamically match files in 'apps'
   template:
     metadata:
-      name: "{{branch}}-app"  # Application name dynamically set per branch
+      name: "{{path.basename}}-app"  # Extract the basename of the file for app name
     spec:
       project: default
       source:
         repoURL: https://github.com/kuna-mexa13/test-app
-        targetRevision: "{{branch}}"  # Uses the current branch dynamically
-        path: config/apps/  # Path to manifests in the branch
+        targetRevision: HEAD
+        path: config/apps/  # Path within the repo
       destination:
         server: https://kubernetes.default.svc
-        namespace: "{{branch}}-namespace"  # Unique namespace per branch
+        namespace: "{{path.basename}}-namespace"  # Dynamic namespace name
       syncPolicy:
         automated:
           prune: true
