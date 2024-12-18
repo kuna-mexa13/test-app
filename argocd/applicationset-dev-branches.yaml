@@ -60,9 +60,11 @@ metadata:
 spec:
   generators:
     - scmProvider:
-        provider: my-github         # Matches the name defined in argocd-cm
-        repository: "kuna-mexa13/test-app" 
-        branchMatch: '^dev-.*$'     # Regex to match branches starting with dev-
+        # Reference the provider you defined in argocd-cm
+        name: my-github
+        filters:
+          - repositoryMatch: '^test-app$'
+          - branchMatch: '^dev-.*$'
   template:
     metadata:
       name: '{{ branch }}-app'
