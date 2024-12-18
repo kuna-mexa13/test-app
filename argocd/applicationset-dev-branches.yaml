@@ -59,14 +59,19 @@ metadata:
   namespace: argocd
 spec:
   generators:
+    # - git:
+    #     repoURL: "https://github.com/kuna-mexa13/test-app.git"
+    #     revision: HEAD
+    #     directories:
+    #       - path: "app/overlays/dev-*"
+    #         # Optionally, you can further filter with include/exclude regex if needed:
+    #         # include: "^dev-.*$"
+    #         # exclude: "^dev-skip.*$"
     - git:
         repoURL: "https://github.com/kuna-mexa13/test-app.git"
-        revision: HEAD
+        revision: "dev-*"
         directories:
-          - path: "app/overlays/dev-*"
-            # Optionally, you can further filter with include/exclude regex if needed:
-            # include: "^dev-.*$"
-            # exclude: "^dev-skip.*$"
+          - path: "app/overlays"
   template:
     metadata:
       # Use the basename of the directory as the application name
