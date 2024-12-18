@@ -8,8 +8,8 @@ spec:
     - git:
         repoURL: https://github.com/kuna-mexa13/test-app.git
         revision: HEAD  # Resolves the latest branch (default branch)
-        filters:
-          - branchMatch: '^dev-.*$'
+        # filters:
+        #   - branchMatch: '^dev-.*$'
         path: .  # Path for manifests
   template:
     metadata:
