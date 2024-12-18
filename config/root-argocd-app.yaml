@@ -1,38 +1,56 @@
+# apiVersion: argoproj.io/v1alpha1
+# kind: AppProject
+# metadata:
+#   name: aggregator
+#   namespace: argocd
+# spec:
+#   clusterResourceWhitelist:
+#     - group: '*'
+#       kind: '*'
+#   destinations:
+#     - namespace: '*'
+#       server: '*'
+#   orphanedResources:
+#     warn: true
+#   sourceRepos:
+#     - '*'
+
+# ---
+
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: aggregator-all-apps
+#   namespace: argocd
+# spec:
+#   project: aggregator
+#   source:
+#     repoURL: https://github.com/kuna-mexa13/test-app.git
+#     path: config/appsets
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: argocd
+#   syncPolicy:
+#     syncOptions:
+#     - CreateNamespace=true  
+#     automated: 
+#       prune: true
+#       selfHeal: true
+
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: aggregator
   namespace: argocd
 spec:
+  description: Project for aggregating branch-based applications
   clusterResourceWhitelist:
     - group: '*'
       kind: '*'
   destinations:
     - namespace: '*'
-      server: '*'
+      server: '*'  # Allow deployment to all namespaces in the cluster
   orphanedResources:
     warn: true
   sourceRepos:
-    - '*'
-
----
-
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: aggregator-all-apps
-  namespace: argocd
-spec:
-  project: aggregator
-  source:
-    repoURL: https://github.com/kuna-mexa13/test-app.git
-    path: config/appsets
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    syncOptions:
-    - CreateNamespace=true  
-    automated: 
-      prune: true
-      selfHeal: true
+    - https://github.com/kuna-mexa13/test-app.git  # Restrict to your Git repo
