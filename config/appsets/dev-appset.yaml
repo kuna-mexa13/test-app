@@ -10,8 +10,7 @@ spec:
         revision: HEAD  # Resolves the latest branch (default branch)
         filters:
           - branchMatch: '^dev-.*$'
-        directories:
-          - path: .  # Path for manifests
+        path: .  # Path for manifests
   template:
     metadata:
       name: "{{branch}}-app"  # Application name dynamically based on branch name
