@@ -6,22 +6,22 @@ metadata:
 spec:
   generators:
     - git:
-        repoURL: https://github.com/kuna-mexa13/test-app
-        revision: HEAD  # Use HEAD to reference the default branch
-        files:
-          - path: config/apps/application-*.yaml  # Dynamically match files in 'apps'
+        repoURL: https://github.com/kuna-mexa13/test-app.git
+        revision: refs/heads/dev-*  # Match all branches starting with 'dev-'
+        directories:
+          - path: .  # Scans the repository root for manifests
   template:
     metadata:
-      name: "{{path.basename}}-app"  # Extract the basename of the file for app name
+      name: "{{branch}}-app"  # Application name based on branch name
     spec:
-      project: default
+      project: aggregator  # Use the AppProject 'aggregator'
       source:
-        repoURL: https://github.com/kuna-mexa13/test-app
-        targetRevision: HEAD
-        path: config/apps/  # Path within the repo
+        repoURL: https://github.com/kuna-mexa13/test-app.git
+        targetRevision: "{{branch}}"  # Dynamically uses the branch name
+        path: .  # Points to the root of the repository (change if needed)
       destination:
         server: https://kubernetes.default.svc
-        namespace: "{{path.basename}}-namespace"  # Dynamic namespace name
+        namespace: "{{branch}}-namespace"  # Namespace per branch
       syncPolicy:
         automated:
           prune: true
