@@ -26,7 +26,7 @@ spec:
   project: aggregator
   source:
     repoURL: https://github.com/kuna-mexa13/test-app.git
-    path: config/appsets
+    path: config/apps
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
