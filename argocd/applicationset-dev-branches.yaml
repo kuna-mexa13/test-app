@@ -61,34 +61,28 @@ spec:
   generators:
     - git:
         repoURL: "https://github.com/kuna-mexa13/test-app.git"
-        revision: HEAD
+        # This will match any branch that starts with "dev-"
+        revision: "dev-*"
         directories:
-          - path: "app/overlays/dev-*"
-            # Optionally, you can further filter with include/exclude regex if needed:
-            # include: "^dev-.*$"
-            # exclude: "^dev-skip.*$"
-    # - git:
-    #     repoURL: "https://github.com/kuna-mexa13/test-app.git"
-    #     revision: "dev-*"
-    #     directories:
-    #       - path: "app/overlays"
+          - path: "app/overlays"
+            # Each dev-* branch should have an app/overlays directory
   template:
     metadata:
-      # Use the basename of the directory as the application name
-      name: '{{path.basename}}-app'
+      # Use the branch name as part of the Application name
+      name: '{{ branch }}-app'
     spec:
       project: default
       source:
         repoURL: "https://github.com/kuna-mexa13/test-app.git"
-        # Since we're using HEAD for revision above, targetRevision can also be HEAD
-        targetRevision: HEAD
-        # Each generated directory corresponds to an overlay
-        path: "app/overlays/{{path.basename}}"
+        # Deploy from the matching branch
+        targetRevision: '{{ branch }}'
+        path: "app/overlays"
       destination:
         server: 'https://kubernetes.default.svc'
-        namespace: '{{path.basename}}-namespace'
+        namespace: '{{ branch }}-namespace'
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
+
 
