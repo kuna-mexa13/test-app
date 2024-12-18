@@ -59,24 +59,29 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - git:
-        repoURL: "https://github.com/kuna-mexa13/test-app.git"
-        # This will match any branch that starts with "dev-"
-        revision: "dev-*"
-        directories:
-          - path: "app/overlays"
-            # Each dev-* branch should have an app/overlays directory
+    - scmProvider:
+        # Replace with your Git provider. Supported providers include github, gitlab, bitbucket, etc.
+        provider: github
+        owner: kuna-mexa13
+        repo: test-app
+        # Reference the secret with your token
+        secretRef:
+          name: github-credentials
+          key: token
+        # Filters for branches starting with dev-
+        filters:
+          - kind: branches
+            pattern: ^dev-.*$
   template:
     metadata:
-      # Use the branch name as part of the Application name
+      # App name will be based on the branch name
       name: '{{ branch }}-app'
     spec:
       project: default
       source:
-        repoURL: "https://github.com/kuna-mexa13/test-app.git"
-        # Deploy from the matching branch
+        repoURL: 'https://github.com/kuna-mexa13/test-app.git'
         targetRevision: '{{ branch }}'
-        path: "app/overlays"
+        path: 'app/overlays'
       destination:
         server: 'https://kubernetes.default.svc'
         namespace: '{{ branch }}-namespace'
@@ -84,5 +89,3 @@ spec:
         automated:
           prune: true
           selfHeal: true
-
-
