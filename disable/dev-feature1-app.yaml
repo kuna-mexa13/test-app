@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dev-feature1-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/kuna-mexa13/test-app.git'
+    targetRevision: HEAD
+    path: app/overlays/dev-feature1
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: dev-feature1-namespace
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
