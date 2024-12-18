@@ -9,9 +9,9 @@ spec:
         repoURL: https://github.com/kuna-mexa13/test-app.git
         revision: HEAD  # References the HEAD to list all branches
         branches: 
-          - dev-*  # Matches all branches starting with "dev-"
-        directories:
-          - path: .  # Path for manifests
+        - dev-*  # Matches all branches starting with "dev-"
+        directories:        
+        - path: .  # Path for manifests
   template:
     metadata:
       name: "{{branch}}-app"  # Application name dynamically based on branch name
