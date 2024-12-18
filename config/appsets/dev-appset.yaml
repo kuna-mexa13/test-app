@@ -19,7 +19,7 @@ spec:
       source:
         repoURL: https://github.com/kuna-mexa13/test-app.git
         targetRevision: "{{branch}}"  # Uses current branch dynamically
-        path: {{ .path.path }}  # Assumes manifests exist in the root of the branch
+        path: config/apps/  # Assumes manifests exist in the root of the branch
       destination:
         server: https://kubernetes.default.svc
         namespace: "{{branch}}-namespace"  # Namespace dynamically created per branch
