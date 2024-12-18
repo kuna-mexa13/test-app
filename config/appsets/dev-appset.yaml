@@ -5,21 +5,21 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - git:
-        repoURL: https://github.com/kuna-mexa13/test-app.git
-        revision: HEAD  # References the HEAD to list all branches
-        branches: 
-        - dev-*  # Matches all branches starting with "dev-"
-        directories:        
-        - path: .  # Path for manifests
+  - git:
+      repoURL: https://github.com/kuna-mexa13/test-app.git
+      revision: HEAD  # References the HEAD to list all branches
+      branches: 
+      - dev-*  # Matches all branches starting with "dev-"
   template:
     metadata:
-      name: "{{branch}}-app"  # Application name dynamically based on branch name
+      # name: "{{branch}}-app"  # Application name dynamically based on branch name
+      name: '{{glob}}'
     spec:
       project: aggregator
       source:
         repoURL: https://github.com/kuna-mexa13/test-app.git
-        targetRevision: "{{branch}}"  # Dynamically resolves to the branch name
+        # targetRevision: "{{branch}}"  # Dynamically resolves to the branch name
+        targetRevision: '{{branch.fullname}}'
         path: .  # Points to the root of the repository
       destination:
         server: https://kubernetes.default.svc
