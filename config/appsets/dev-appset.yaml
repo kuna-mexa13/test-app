@@ -7,21 +7,21 @@ spec:
   generators:
     - git:
         repoURL: https://github.com/kuna-mexa13/test-app.git
-        revision: refs/heads/dev-*  # Match all branches starting with 'dev-'
+        revision: HEAD  # Resolves the latest branch (default branch)
         directories:
-          - path: .  # Scans the repository root for manifests
+          - path: .  # Path for manifests
   template:
     metadata:
-      name: "{{branch}}-app"  # Application name based on branch name
+      name: "{{branch}}-app"  # Application name dynamically based on branch name
     spec:
-      project: aggregator  # Use the AppProject 'aggregator'
+      project: aggregator
       source:
         repoURL: https://github.com/kuna-mexa13/test-app.git
-        targetRevision: "{{branch}}"  # Dynamically uses the branch name
-        path: .  # Points to the root of the repository (change if needed)
+        targetRevision: "{{branch}}"  # Uses current branch dynamically
+        path: .  # Assumes manifests exist in the root of the branch
       destination:
         server: https://kubernetes.default.svc
-        namespace: "{{branch}}-namespace"  # Namespace per branch
+        namespace: "{{branch}}-namespace"  # Namespace dynamically created per branch
       syncPolicy:
         automated:
           prune: true
