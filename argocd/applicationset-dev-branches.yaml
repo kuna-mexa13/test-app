@@ -1,3 +1,57 @@
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: dev-branches
+#   namespace: argocd
+# spec:
+#   generators:
+#     - git:
+#         repoURL: "https://github.com/kuna-mexa13/test-app.git"
+#         revision: "HEAD"
+#         # The path pattern points to the overlays directory.
+#         # This will list directories like app/overlays/dev-feature1, dev-feature2, etc.
+#         path: "app/overlays/*"
+        
+#         # If you need to specifically filter by branch, you can use branchMatch.
+#         # For example, if you maintain one main branch and feature branches:
+#         # You might skip this if you're always working off a single branch that contains overlays.
+#         # Alternatively, if each dev-* feature is actually a branch in Git:
+#         # Then omit 'path' and rely solely on branch-based generation like this:
+#         #
+#         #   - git:
+#         #       repoURL: "https://your-git-repo.git"
+#         #       filters:
+#         #         - branchMatch: '^dev-.*$'
+#         #       path: "app/overlays/"
+#         #
+#         # This would create an Application per dev-* branch, assuming the overlays exist there.
+#         #
+#         # Note: If each branch separately has a dev-featureX overlay directory, 
+#         # you might need one of these approaches:
+#         #
+#         # 1) One main branch that holds all overlays. Each dev-* overlay directory is created 
+#         #    when a dev-* branch merges or is pushed to the repo. (Directory-based generation)
+#         #
+#         # 2) Point to the same repo but rely on a branch generator:
+#         #    (requires a different structure—see notes below)
+        
+#   template:
+#     metadata:
+#       name: '{{path.basename}}-app'  # The application's name derived from directory name
+#     spec:
+#       project: default
+#       source:
+#         repoURL: 'https://github.com/kuna-mexa13/test-app.git'
+#         targetRevision: HEAD
+#         path: 'app/overlays/{{path.basename}}'
+#       destination:
+#         server: 'https://kubernetes.default.svc'
+#         namespace: '{{path.basename}}-namespace'
+#       syncPolicy:
+#         automated:
+#           prune: true
+#           selfHeal: true
+
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -7,46 +61,21 @@ spec:
   generators:
     - git:
         repoURL: "https://github.com/kuna-mexa13/test-app.git"
-        revision: "HEAD"
-        # The path pattern points to the overlays directory.
-        # This will list directories like app/overlays/dev-feature1, dev-feature2, etc.
-        path: "app/overlays/*"
-        
-        # If you need to specifically filter by branch, you can use branchMatch.
-        # For example, if you maintain one main branch and feature branches:
-        # You might skip this if you're always working off a single branch that contains overlays.
-        # Alternatively, if each dev-* feature is actually a branch in Git:
-        # Then omit 'path' and rely solely on branch-based generation like this:
-        #
-        #   - git:
-        #       repoURL: "https://your-git-repo.git"
-        #       filters:
-        #         - branchMatch: '^dev-.*$'
-        #       path: "app/overlays/"
-        #
-        # This would create an Application per dev-* branch, assuming the overlays exist there.
-        #
-        # Note: If each branch separately has a dev-featureX overlay directory, 
-        # you might need one of these approaches:
-        #
-        # 1) One main branch that holds all overlays. Each dev-* overlay directory is created 
-        #    when a dev-* branch merges or is pushed to the repo. (Directory-based generation)
-        #
-        # 2) Point to the same repo but rely on a branch generator:
-        #    (requires a different structure—see notes below)
-        
+        filters:
+          - branchMatch: '^dev-.*$'
+        path: "app/overlays"
   template:
     metadata:
-      name: '{{path.basename}}-app'  # The application's name derived from directory name
+      name: '{{branch}}-app' # Name the app after the branch
     spec:
       project: default
       source:
         repoURL: 'https://github.com/kuna-mexa13/test-app.git'
-        targetRevision: HEAD
-        path: 'app/overlays/{{path.basename}}'
+        targetRevision: '{{branch}}' # Deploy from that branch
+        path: "app/overlays" # The overlays directory in that branch
       destination:
         server: 'https://kubernetes.default.svc'
-        namespace: '{{path.basename}}-namespace'
+        namespace: '{{branch}}-namespace'
       syncPolicy:
         automated:
           prune: true
