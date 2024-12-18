@@ -60,7 +60,7 @@ metadata:
 spec:
   generators:
     - git:
-        repoURL: "https://your-git-repo.git"
+        repoURL: "https://github.com/kuna-mexa13/test-app.git"
         revision: HEAD
         directories:
           - path: "app/overlays/dev-*"
@@ -74,7 +74,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: "https://your-git-repo.git"
+        repoURL: "https://github.com/kuna-mexa13/test-app.git"
         # Since we're using HEAD for revision above, targetRevision can also be HEAD
         targetRevision: HEAD
         # Each generated directory corresponds to an overlay
