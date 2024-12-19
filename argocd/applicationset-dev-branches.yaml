@@ -100,22 +100,23 @@ spec:
           - path: 'app/base'
   template:
     metadata:
-      name: '{{ path | replace "app/base/dev-" "" | lower }}'
+      name: '{{path | replace "app/base/" "" | lower | regexReplaceAll "[^a-z0-9]" "-"}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/kuna-mexa13/test-app.git
-        targetRevision: '{{ path }}'
+        targetRevision: '{{path}}'
         path: 'app/base'
         kustomize:
-          namePrefix: '{{ path | replace "app/base/dev-" "" | lower }}-'
+          namePrefix: '{{path | replace "app/base/" "" | lower | regexReplaceAll "[^a-z0-9]" "-"}}-'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{ path | replace "app/base/dev-" "" | lower }}'
+        namespace: '{{path | replace "app/base/" "" | lower | regexReplaceAll "[^a-z0-9]" "-"}}'
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
+
 
 
 
