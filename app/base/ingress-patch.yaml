@@ -4,4 +4,4 @@ metadata:
   name: k8s-info-ingress
 spec:
   rules:
-    - host: 'dev-feature1.bteam.dev'
+    - host: 'dev-feature2.bteam.dev'

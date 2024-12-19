@@ -108,7 +108,7 @@ spec:
       source:
         repoURL: https://github.com/kuna-mexa13/test-app.git
         targetRevision: HEAD #'{{branch}}'
-        path: 'app/base'
+        path: '{{path}}'
       destination:
         server: https://kubernetes.default.svc
         namespace: 'dev-feature1-namespace'
