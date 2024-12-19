@@ -52,6 +52,40 @@
 #           prune: true
 #           selfHeal: true
 
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: dev-branches
+#   namespace: argocd
+# spec:
+#   generators:
+#     - git:
+#         repoURL: https://github.com/kuna-mexa13/test-app.git
+#         revision: master
+#         directories:
+#           - path: 'app/base'
+#   template:
+#     metadata:
+#       name: dev-test
+#     spec:
+#       project: default
+#       source:
+#         repoURL: https://github.com/kuna-mexa13/test-app.git
+#         targetRevision: HEAD
+#         path: app/base
+#         # helm:
+#         parameters:
+#           - name: ingress.hosts[0].host
+#             # value: '{{path | replace "app/base/dev-" ""}}.bteam.dev'
+#             value: '{{branch}}.bteam.dev'
+#       destination:
+#         server: https://kubernetes.default.svc
+#         namespace: default
+#       syncPolicy:
+#         automated:
+#           prune: true
+#           selfHeal: true
+
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -66,18 +100,18 @@ spec:
           - path: 'app/base'
   template:
     metadata:
-      name: dev-test
+      name: '{{path | replace "app/base/dev-" ""}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/kuna-mexa13/test-app.git
-        targetRevision: HEAD
-        path: app/base
-        # helm:
-        parameters:
-          - name: ingress.hosts[0].host
-            # value: '{{path | replace "app/base/dev-" ""}}.bteam.dev'
-            value: '{{branch}}.bteam.dev'
+        targetRevision: '{{path}}'
+        path: 'app/base'
+        kustomize:
+          namePrefix: '{{path | replace "app/base/dev-" ""}}-'
+          images:
+            - name: k8s-info-app
+              newTag: '{{path}}'  # Use the branch name as the tag
       destination:
         server: https://kubernetes.default.svc
         namespace: default
