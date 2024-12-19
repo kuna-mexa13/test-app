@@ -96,24 +96,25 @@ spec:
     - git:
         repoURL: https://github.com/kuna-mexa13/test-app.git
         revision: master
-        branches:
-          - 'dev-*'
+        templates:
+          - path: '*'
   template:
     metadata:
-      name: '{{ branch }}'
+      name: '{{branch | replace "dev-" ""}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/kuna-mexa13/test-app.git
-        targetRevision: '{{ branch }}'
+        targetRevision: '{{branch}}'
         path: 'app/base'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{ branch }}'
+        namespace: '{{branch | replace "dev-" ""}}'
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
+
 
 
 
