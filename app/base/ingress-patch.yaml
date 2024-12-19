@@ -1,0 +1,7 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-info-ingress
+spec:
+  rules:
+    - host: placeholder.bteam.dev  # This will be patched by the overlay
