@@ -21,7 +21,7 @@ resources:
   - ingress.yaml
 
 patches:
-  - path: ingress-patch.yaml
+  - path: ingress.yaml
     target:
       kind: Ingress
       name: k8s-info-ingress
