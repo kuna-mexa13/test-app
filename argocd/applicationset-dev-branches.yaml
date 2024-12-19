@@ -96,26 +96,25 @@ spec:
     - git:
         repoURL: https://github.com/kuna-mexa13/test-app.git
         revision: master
-        directories:
-          - path: 'app/base'
+        branches:
+          - 'dev-*'
   template:
     metadata:
-      name: '{{path | replace "app/base/" "" | lower | regexReplaceAll "[^a-z0-9]" "-"}}'
+      name: '{{ branch }}'
     spec:
       project: default
       source:
         repoURL: https://github.com/kuna-mexa13/test-app.git
-        targetRevision: '{{path}}'
+        targetRevision: '{{ branch }}'
         path: 'app/base'
-        kustomize:
-          namePrefix: '{{path | replace "app/base/" "" | lower | regexReplaceAll "[^a-z0-9]" "-"}}-'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{path | replace "app/base/" "" | lower | regexReplaceAll "[^a-z0-9]" "-"}}'
+        namespace: '{{ branch }}'
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
+
 
 
 
