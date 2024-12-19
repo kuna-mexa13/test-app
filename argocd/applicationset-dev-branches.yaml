@@ -100,22 +100,23 @@ spec:
           - path: 'app/base'
   template:
     metadata:
-      name: '{{path | replace "app/base/dev-" ""}}'
+      name: '{{ path | replace "app/base/dev-" "" | lower }}'
     spec:
       project: default
       source:
         repoURL: https://github.com/kuna-mexa13/test-app.git
-        targetRevision: '{{path}}'
+        targetRevision: '{{ path }}'
         path: 'app/base'
         kustomize:
-          namePrefix: '{{path | replace "app/base/dev-" ""}}-'
+          namePrefix: '{{ path | replace "app/base/dev-" "" | lower }}-'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{path | replace "app/base/dev-" ""}}'
+        namespace: '{{ path | replace "app/base/dev-" "" | lower }}'
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
+
 
 
 

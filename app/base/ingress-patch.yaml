@@ -4,4 +4,4 @@ metadata:
   name: k8s-info-ingress
 spec:
   rules:
-    - host: '{{path | replace "app/base/dev-" ""}}.bteam.dev'
+    - host: '{{path | replace "app/base/dev-" "" | lower }}.bteam.dev'
