@@ -1,7 +1,3 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: k8s-info-ingress
-spec:
-  rules:
-    - host: 'dev-feature2.bteam.dev'
+- op: replace
+  path: /spec/rules/0/host
+  value: dev-feature1.bteam.dev

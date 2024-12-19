@@ -21,10 +21,7 @@ resources:
   - ingress.yaml
 
 patches:
-  - path: ingress.yaml
+  - path: ingress-patch.yaml
     target:
       kind: Ingress
       name: k8s-info-ingress
-
-patchesStrategicMerge:
-  - ingress-patch.yaml
