@@ -59,25 +59,32 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - scmProvider:
-        # Reference the provider you defined in argocd-cm
-        name: my-github
-        filters:
-          - repositoryMatch: '^test-app$'
-          - branchMatch: '^dev-.*$'
+    - git:
+        repoURL: https://github.com/kuna-mexa13/test-app.git
+        revision: master
+        directories:
+          - path: 'app/base'
   template:
     metadata:
-      name: '{{ branch }}-app'
+      name: dev-test
     spec:
       project: default
       source:
-        repoURL: "https://github.com/kuna-mexa13/test-app.git"
-        targetRevision: '{{ branch }}'
-        path: "app/overlays"
+        repoURL: https://github.com/kuna-mexa13/test-app.git
+        targetRevision: HEAD
+        path: app/base
+        # helm:
+        parameters:
+          - name: ingress.hosts[0].host
+            # value: '{{path | replace "app/base/dev-" ""}}.bteam.dev'
+            value: '{{branch}}.bteam.dev'
       destination:
-        server: 'https://kubernetes.default.svc'
-        namespace: '{{ branch }}-namespace'
+        server: https://kubernetes.default.svc
+        namespace: default
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
+
+
+
