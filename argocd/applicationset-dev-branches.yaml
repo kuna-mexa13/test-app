@@ -109,16 +109,14 @@ spec:
         path: 'app/base'
         kustomize:
           namePrefix: '{{path | replace "app/base/dev-" ""}}-'
-          images:
-            - name: k8s-info-app
-              newTag: '{{path}}'  # Use the branch name as the tag
       destination:
         server: https://kubernetes.default.svc
-        namespace: default
+        namespace: '{{path | replace "app/base/dev-" ""}}'
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
+
 
 
 

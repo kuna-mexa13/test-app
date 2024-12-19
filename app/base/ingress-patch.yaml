@@ -4,4 +4,4 @@ metadata:
   name: k8s-info-ingress
 spec:
   rules:
-    - host: placeholder.bteam.dev  # This will be patched by the overlay
+    - host: '{{path | replace "app/base/dev-" ""}}.bteam.dev'
