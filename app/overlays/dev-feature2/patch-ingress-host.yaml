@@ -3,4 +3,4 @@
   value: dev-feature2.bteam.dev
 - op: replace
   path: /metadata/name
-  value: dev-feature2.bteam.dev
+  value: dev-feature2
