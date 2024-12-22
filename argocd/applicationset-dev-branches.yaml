@@ -100,21 +100,27 @@ spec:
         #   - path: '*'
         directories:
           - path: 'app/base'
+    - list:
+        elements:
+        - branch: dev-feature1
+          url: https://kubernetes.default.svc
+        - branch: dev-feature2
+
   template:
     metadata:
-      name: '{{path.basename}}' #'{{branch}}'
+      name: '{{branch}}' #'{{path.basename}}' #'{{branch}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/kuna-mexa13/test-app.git
         targetRevision: HEAD #'{{branch}}'
-        path: '{{path}}'
+        path: 'app/base' #'{{path}}'
         # parameters:
         # - name: ingress.hosts[0].host
         #   value: dev-feature2.bteam.dev
       destination:
-        server: https://kubernetes.default.svc
-        namespace: 'dev-feature1-namespace'
+        server: '{{url}}' #https://kubernetes.default.svc
+        namespace: '{{branch}}-namespace' #'dev-feature1-namespace'
       syncPolicy:
         automated:
           prune: true
